@@ -7,12 +7,14 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @Entity
+@Data
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String name, surname;
 
     @OneToMany
     private List<Book> books;
