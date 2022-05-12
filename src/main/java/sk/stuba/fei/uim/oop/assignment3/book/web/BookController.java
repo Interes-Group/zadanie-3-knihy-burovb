@@ -5,10 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sk.stuba.fei.uim.oop.assignment3.book.logic.BookService;
-import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.Amount;
+import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.BookAmount;
 import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.BookRequest;
 import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.BookRequestEdit;
 import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.BookResponse;
+import sk.stuba.fei.uim.oop.assignment3.exceptions.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,37 +26,37 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<BookResponse> addBook(@RequestBody BookRequest request) {
+    public ResponseEntity<BookResponse> addBook(@RequestBody BookRequest request) throws NotFoundException {
         return new ResponseEntity<>(new BookResponse(this.service.create(request)), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public BookResponse getBookById(@PathVariable("id") Long id) {
+    public BookResponse getBookById(@PathVariable("id") Long id) throws NotFoundException {
         return new BookResponse(this.service.getById(id));
     }
 
     @PutMapping("/{id}")
-    public BookResponse updateBookById(@PathVariable("id") Long id, @RequestBody(required = false) BookRequestEdit request) {
+    public BookResponse updateBookById(@PathVariable("id") Long id, @RequestBody(required = false) BookRequestEdit request) throws NotFoundException {
         return new BookResponse(this.service.update(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public void removeBookById(@PathVariable("id") Long id) {
+    public void removeBookById(@PathVariable("id") Long id) throws NotFoundException {
         this.service.removeById(id);
     }
 
     @GetMapping("/{id}/amount")
-    public Amount getAmountById(@PathVariable("id") Long id) {
-        return new Amount(this.getBookById(id).getAmount());
+    public BookAmount getAmountById(@PathVariable("id") Long id) throws NotFoundException {
+        return new BookAmount(this.getBookById(id).getAmount());
     }
 
     @PostMapping("/{id}/amount")
-    public Amount addAmountById(@PathVariable("id") Long id, @RequestBody Amount request) {
-        return new Amount(this.service.addAmount(id, request).getAmount());
+    public BookAmount addAmountById(@PathVariable("id") Long id, @RequestBody BookAmount request) throws NotFoundException {
+        return new BookAmount(this.service.addAmount(id, request).getAmount());
     }
 
     @GetMapping("/{id}/lendCount")
-    public Amount getLendCountById(@PathVariable("id") Long id) {
-        return new Amount(this.service.getById(id).getLendCount());
+    public BookAmount getLendCountById(@PathVariable("id") Long id) throws NotFoundException {
+        return new BookAmount(this.service.getById(id).getLendCount());
     }
 }

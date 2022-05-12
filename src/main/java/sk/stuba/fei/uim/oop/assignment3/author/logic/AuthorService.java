@@ -2,10 +2,12 @@ package sk.stuba.fei.uim.oop.assignment3.author.logic;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import sk.stuba.fei.uim.oop.assignment3.author.data.Author;
 import sk.stuba.fei.uim.oop.assignment3.author.data.IAuthorRepository;
 import sk.stuba.fei.uim.oop.assignment3.author.web.bodies.AuthorRequest;
+import sk.stuba.fei.uim.oop.assignment3.exceptions.NotFoundException;
 
 import java.util.List;
 
@@ -35,12 +37,12 @@ public class AuthorService implements IAuthorService {
     }
 
     @Override
-    public Author getById(Long id) {
-        return this.repository.findById(id).get();
+    public Author getById(Long id) throws NotFoundException {
+        return this.repository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public Author update(Long id, AuthorRequest request) {
+    public Author update(Long id, AuthorRequest request) throws NotFoundException {
         Author a = getById(id);
 
         var name = request.getName();
@@ -54,7 +56,11 @@ public class AuthorService implements IAuthorService {
     }
 
     @Override
-    public void removeById(Long id) {
-        this.repository.deleteById(id);
+    public void removeById(Long id) throws NotFoundException {
+        try {
+            this.repository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundException();
+        }
     }
 }
