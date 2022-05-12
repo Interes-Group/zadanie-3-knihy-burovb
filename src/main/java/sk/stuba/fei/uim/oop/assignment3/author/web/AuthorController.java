@@ -33,11 +33,8 @@ public class AuthorController {
     }
 
     @PutMapping("/{id}")
-    public AuthorResponse updateAuthorById(@PathVariable("id") Long id,
-                                           @RequestParam(name = "name", required = false) String name,
-                                           @RequestParam(name = "surname", required = false) String surname) {
-
-        return new AuthorResponse(this.service.update(id, name, surname));
+    public AuthorResponse updateAuthorById(@PathVariable("id") Long id, @RequestBody(required = false) AuthorRequest request) {
+        return new AuthorResponse(this.service.update(id, request));
     }
 
     @DeleteMapping("/{id}")

@@ -9,6 +9,7 @@ import sk.stuba.fei.uim.oop.assignment3.book.data.Book;
 import sk.stuba.fei.uim.oop.assignment3.book.data.IBookRepository;
 import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.Amount;
 import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.BookRequest;
+import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.BookRequestEdit;
 import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.BookResponse;
 
 import java.util.List;
@@ -53,16 +54,21 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public Book update(Long id, String name, String description, Long author, Integer pages) {
+    public Book update(Long id, BookRequestEdit request) {
         BookResponse response = new BookResponse(this.repository.findById(id).get());
         Book b = new Book(response);
 
         Author a = this.authorService.getRepository().findById(response.getAuthor()).get();
+        var author = request.getAuthor();
         if (author != null && !a.getId().equals(author)) {
             a = this.authorService.getRepository().findById(author).get();
         }
 
         this.removeById(id);
+
+        var name = request.getName();
+        var description = request.getDescription();
+        var pages = request.getPages();
 
         if (name != null) b.setName(name);
         if (description != null) b.setDescription(description);

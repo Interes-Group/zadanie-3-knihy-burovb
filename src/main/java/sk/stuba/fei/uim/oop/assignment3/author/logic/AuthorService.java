@@ -40,8 +40,11 @@ public class AuthorService implements IAuthorService {
     }
 
     @Override
-    public Author update(Long id, String name, String surname) {
+    public Author update(Long id, AuthorRequest request) {
         Author a = getById(id);
+
+        var name = request.getName();
+        var surname = request.getSurname();
 
         if (name != null) a.setName(name);
         if (surname != null) a.setSurname(surname);

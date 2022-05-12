@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import sk.stuba.fei.uim.oop.assignment3.book.logic.BookService;
 import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.Amount;
 import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.BookRequest;
+import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.BookRequestEdit;
 import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.BookResponse;
 
 import java.util.List;
@@ -34,13 +35,8 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public BookResponse updateBookById(@PathVariable("id") Long id,
-                                       @RequestParam(name = "name", required = false) String name,
-                                       @RequestParam(name = "description", required = false) String description,
-                                       @RequestParam(name = "author", required = false) Long author,
-                                       @RequestParam(name = "pages", required = false) Integer pages) {
-
-        return new BookResponse(this.service.update(id, name, description, author, pages));
+    public BookResponse updateBookById(@PathVariable("id") Long id, @RequestBody(required = false) BookRequestEdit request) {
+        return new BookResponse(this.service.update(id, request));
     }
 
     @DeleteMapping("/{id}")

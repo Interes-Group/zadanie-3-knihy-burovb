@@ -12,7 +12,7 @@ public interface IAuthorService {
 
     Author getById(Long id);
 
-    Author update(Long id, String name, String surname);
+    Author update(Long id, AuthorRequest request);
 
     void removeById(Long id);
 }
