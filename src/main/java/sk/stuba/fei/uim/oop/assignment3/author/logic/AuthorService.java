@@ -1,20 +1,18 @@
-package sk.stuba.fei.uim.oop.assignment3.author;
+package sk.stuba.fei.uim.oop.assignment3.author.logic;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sk.stuba.fei.uim.oop.assignment3.book.Book;
-import sk.stuba.fei.uim.oop.assignment3.book.BookService;
+import sk.stuba.fei.uim.oop.assignment3.author.data.Author;
+import sk.stuba.fei.uim.oop.assignment3.author.data.IAuthorRepository;
+import sk.stuba.fei.uim.oop.assignment3.author.web.bodies.AuthorRequest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class AuthorService implements IAuthorService {
     @Getter
     private IAuthorRepository repository;
-    @Autowired
-    private BookService bookService;
 
     @Autowired
     public AuthorService(IAuthorRepository repository) {
@@ -42,23 +40,18 @@ public class AuthorService implements IAuthorService {
     }
 
     @Override
-    public Author update(Author a, String name, String surname) {
+    public Author update(Long id, String name, String surname) {
+        Author a = getById(id);
+
         if (name != null) a.setName(name);
         if (surname != null) a.setSurname(surname);
-        this.repository.save(a);
 
+        this.repository.save(a);
         return a;
     }
 
     @Override
     public void removeById(Long id) {
-        List<Book> books = this.repository.findById(id).get().getBooks();
-        List<Book> tempList = new ArrayList<>(books);
-        for (Book book: tempList) {
-            Book temp = new Book(book);
-            books.remove(temp);
-            this.bookService.getRepository().delete(temp);
-        }
         this.repository.deleteById(id);
     }
 }

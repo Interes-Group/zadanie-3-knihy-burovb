@@ -1,7 +1,7 @@
-package sk.stuba.fei.uim.oop.assignment3.author;
+package sk.stuba.fei.uim.oop.assignment3.author.data;
 
 import lombok.Data;
-import sk.stuba.fei.uim.oop.assignment3.book.Book;
+import sk.stuba.fei.uim.oop.assignment3.book.data.Book;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class Author {
 
     private String name, surname;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Book> books;
 
     public Author() {

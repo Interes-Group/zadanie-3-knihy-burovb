@@ -1,8 +1,9 @@
-package sk.stuba.fei.uim.oop.assignment3.book;
+package sk.stuba.fei.uim.oop.assignment3.book.data;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import sk.stuba.fei.uim.oop.assignment3.author.Author;
+import sk.stuba.fei.uim.oop.assignment3.author.data.Author;
+import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.BookResponse;
 
 import javax.persistence.*;
 
@@ -19,13 +20,11 @@ public class Book {
     @ManyToOne
     private Author author;
 
-    private int pages, amount, lendCount;
+    private Integer pages, amount, lendCount;
 
-    public Book(Book book) {
-        this.id = book.getId();
+    public Book(BookResponse book) {
         this.name = book.getName();
         this.description = book.getDescription();
-        this.author = book.getAuthor();
         this.pages = book.getPages();
         this.amount = book.getAmount();
         this.lendCount = book.getLendCount();
