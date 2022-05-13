@@ -3,7 +3,6 @@ package sk.stuba.fei.uim.oop.assignment3.book.data;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import sk.stuba.fei.uim.oop.assignment3.author.data.Author;
-import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.BookResponse;
 
 import javax.persistence.*;
 

@@ -13,4 +13,10 @@ public class ControllerExceptionHandler {
     public void handleNotFound() {
 
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BadRequestException.class)
+    public void handleBadRequest() {
+
+    }
 }
