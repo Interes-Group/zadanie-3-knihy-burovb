@@ -1,6 +1,7 @@
 package sk.stuba.fei.uim.oop.assignment3.author.data;
 
 import lombok.Data;
+import lombok.ToString;
 import sk.stuba.fei.uim.oop.assignment3.book.data.Book;
 
 import javax.persistence.*;

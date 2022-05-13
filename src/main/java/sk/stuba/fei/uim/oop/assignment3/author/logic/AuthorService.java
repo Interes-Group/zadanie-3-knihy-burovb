@@ -51,8 +51,7 @@ public class AuthorService implements IAuthorService {
         if (name != null) a.setName(name);
         if (surname != null) a.setSurname(surname);
 
-        this.repository.save(a);
-        return a;
+        return this.repository.save(a);
     }
 
     @Override

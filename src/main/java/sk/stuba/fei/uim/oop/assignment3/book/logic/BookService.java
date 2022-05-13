@@ -10,7 +10,6 @@ import sk.stuba.fei.uim.oop.assignment3.book.data.IBookRepository;
 import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.BookAmount;
 import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.BookRequest;
 import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.BookRequestEdit;
-import sk.stuba.fei.uim.oop.assignment3.book.web.bodies.BookResponse;
 import sk.stuba.fei.uim.oop.assignment3.exceptions.NotFoundException;
 
 import java.util.List;
@@ -43,8 +42,8 @@ public class BookService implements IBookService {
         b.setLendCount(request.getLendCount());
 
         Author author = this.authorService.getRepository().findById(request.getAuthor()).orElseThrow(NotFoundException::new);
-        b.setAuthor(author);
         author.getBooks().add(b);
+        b.setAuthor(author);
 
         return this.repository.save(b);
     }
@@ -56,16 +55,14 @@ public class BookService implements IBookService {
 
     @Override
     public Book update(Long id, BookRequestEdit request) throws NotFoundException {
-        BookResponse response = new BookResponse(this.repository.findById(id).orElseThrow(NotFoundException::new));
-        Book b = new Book(response);
+        Book b = this.getById(id);
+        Author a = b.getAuthor();
 
-        Author a = this.authorService.getRepository().findById(response.getAuthor()).orElseThrow(NotFoundException::new);
-        var author = request.getAuthor();
-        if (author != null && !a.getId().equals(author)) {
-            a = this.authorService.getRepository().findById(author).orElseThrow(NotFoundException::new);
+        var authorId = request.getAuthor();
+        if (authorId != null && authorId != 0 && !a.getId().equals(authorId)) {
+            a.getBooks().remove(b);
+            a = this.authorService.getRepository().findById(authorId).orElseThrow(NotFoundException::new);
         }
-
-        this.removeById(id);
 
         var name = request.getName();
         var description = request.getDescription();
@@ -73,10 +70,11 @@ public class BookService implements IBookService {
 
         if (name != null) b.setName(name);
         if (description != null) b.setDescription(description);
-        if (pages != null) b.setPages(pages);
+        if (pages != null && pages != 0) b.setPages(pages);
 
-        b.setAuthor(a);
         a.getBooks().add(b);
+        this.authorService.getRepository().save(a);
+        b.setAuthor(a);
 
         return this.repository.save(b);
     }

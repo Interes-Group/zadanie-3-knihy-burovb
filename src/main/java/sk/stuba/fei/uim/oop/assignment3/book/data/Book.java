@@ -21,12 +21,4 @@ public class Book {
     private Author author;
 
     private Integer pages, amount, lendCount;
-
-    public Book(BookResponse book) {
-        this.name = book.getName();
-        this.description = book.getDescription();
-        this.pages = book.getPages();
-        this.amount = book.getAmount();
-        this.lendCount = book.getLendCount();
-    }
 }
